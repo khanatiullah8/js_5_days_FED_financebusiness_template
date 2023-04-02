@@ -34,25 +34,19 @@ function navMenuHamburger() {
 
 // *** banner slider : start *** //
 var bannerSlider = document.querySelector(".banner-slider");
+var bannerSliderItems = document.querySelectorAll(".banner-slider > li");
 var prevControl = document.querySelector(".banner-slider-control .prev");
 var nextControl = document.querySelector(".banner-slider-control .next");
-var initialLeft = 0;
-var percent = 98.8;
+var initial = 0;
 
-function bannerCarousel(initialLeft, sliderLength) {
-  bannerSlider.style.left = initialLeft * percent + "%";
+bannerSliderItems[initial]?.classList.add('slider-active');
 
-  if (initialLeft == 0) {
-    prevControl.classList.add("inactive");
-  } else {
-    prevControl.classList.remove("inactive");
+function bannerCarousel(index, sliderLength) {
+  for(let i=0; i<sliderLength; i++) {
+    bannerSliderItems[i]?.classList.remove('slider-active');
   }
 
-  if (initialLeft == -(sliderLength - 1)) {
-    nextControl.classList.add("inactive");
-  } else {
-    nextControl.classList.remove("inactive");
-  }
+  bannerSliderItems[index]?.classList.add('slider-active');
 }
 // *** banner slider : end *** //
 
@@ -256,30 +250,20 @@ function indexPageJS() {
   });
 
   // banner slider start
-  var sliderLength = bannerSlider.children.length;
+  var sliderLength = bannerSliderItems.length;
 
-  bannerCarousel(initialLeft, sliderLength);
-
-  setInterval(function () {
-    initialLeft--;
-
-    if (initialLeft == -sliderLength) {
-      initialLeft = 0;
-    }
-
-    bannerCarousel(initialLeft, sliderLength);
-  }, 2500);
+  bannerCarousel(initial, sliderLength);
 
   prevControl.addEventListener("click", function () {
-    var x = -1;
-    initialLeft -= x;
-    bannerCarousel(initialLeft, sliderLength);
+    initial--;
+    if(initial<0) initial = sliderLength-1;
+    bannerCarousel(initial, sliderLength);
   });
 
   nextControl.addEventListener("click", function () {
-    var x = 1;
-    initialLeft -= x;
-    bannerCarousel(initialLeft, sliderLength);
+    initial++;
+    if(initial>sliderLength-1) initial = 0;
+    bannerCarousel(initial, sliderLength);
   });
   // banner slider end
 
